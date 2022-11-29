@@ -1,0 +1,82 @@
+mqtt topics, avayilable by shelly
+    shellies/shellyem3-<deviceid>/emeter/<i>/energy 
+		energy counter in Watt-minute (multiply by 0.017 for having kWh)
+    shellies/shellyem3-<deviceid>/emeter/<i>/returned_energy 
+		energy returned to the grid in Watt-minute
+    shellies/shellyem3-<deviceid>/emeter/<i>/total 
+		total energy in Wh (accumulated in device's non-volatile memory)
+    shellies/shellyem3-<deviceid>/emeter/<i>/total_returned 
+		total energy returned to the grid in Wh (accumulated in device's non-volatile memory)
+    shellies/shellyem3-<deviceid>/emeter/<i>/power 
+		instantaneous active power in Watts
+    shellies/shellyem3-<deviceid>/emeter/<i>/voltage 	
+		grid voltage in Volts
+    shellies/shellyem3-<deviceid>/emeter/<i>/current 
+		current in Amps
+    shellies/shellyem3-<deviceid>/emeter/<i>/pf 
+		power factor (dimensionless)
+    shellies/shellyem3-<deviceid>/relay/0
+		reports status: on, off or overpower
+
+Commands are accepted on:
+    shellies/shellyem3-<deviceid>/relay/0/command 
+		accepts on, off or toggle
+    shellies/shellyem3-<deviceid>/emeter/<i>/command 
+		accepts message reset_totals to reset total and total_returned energy counters to 0
+    shellies/shellyem3-<deviceid>/command 
+		accepts message reset_data to reset all device data
+
+
+atm for interest only
+	power
+	energy
+	temperature
+
+database
+	sqlite
+	values fetched by mqtt
+		line a energy
+		line a power
+		line a total
+		line a current
+.		line b energy
+		line b power
+		line b total
+		line b current
+		line c energy
+		line c power
+		line c total
+		line c current
+		totals
+	values estimated by db or
+		energy 24h sum
+			line a, b, c, total
+			write to db 
+
+presentation
+	for each line + total
+		values
+			power
+			energy day
+			energy total
+			energy sum_lines
+		chart
+			energy last 30 days ?
+
+each 5 minutes
+	orientated by servertime...
+		or unixtime
+	intervall in seconds
+	compare timestamp & interval
+
+03.09.22 version for raspi
+	getting only 2 values each line: power and total
+
+23.09.22 seit 06.09. läuft auf Raspi Pythonskript
+	Schreibintervall 1 Min, volle Sekunden, db power table em3
+	Timestamp YYYY-MM-DD HH:MM:SS
+		zeit
+	Zählerwerte L1-L3
+		L1_sum, L2_sum, L3_sum    INT
+	aktueller Verbrauch L1-L3, bei Wertanzahl >1 dann Durchschnitt
+		L1_W, L2_W, L3_W     float
